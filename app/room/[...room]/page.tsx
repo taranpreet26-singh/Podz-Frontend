@@ -214,7 +214,7 @@ export default function Home() {
 
 
   return (
-    <div className="w-full  min-h-screen py-10">
+    <div className="w-full  min-h-screen bg-black py-10">
       <div className="grid grid-cols-1   lg:grid-cols-2 px-10 lg:px-20 w-full gap-2 lg:gap-10 justify-center items-center">
         <div className="w-[30vw] absolute bottom-5 lg:bottom-0 right-5 z-[1] h-[30vh] lg:relative  mx-auto p-4 lg:w-full lg:h-[80vh]">
         <video ref={localVideoRef} autoPlay className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>

@@ -25,7 +25,7 @@ export default function Home() {
       toast.error('Please Provide Room')
     }
   }
-  return <div className="w-full h-[100vh] overflow-hidden  pt-6 px-6 lg:px-10 "  style={{background:"url('/images/ring-light.webp')",backgroundSize:"cover",backgroundRepeat:"no-repeat"}}>
+  return <div className="w-full h-[100vh] overflow-hidden bg-black pt-6 px-6 lg:px-10 "  style={{background:"url('/images/ring-light.webp')",backgroundSize:"cover",backgroundRepeat:"no-repeat"}}>
     <nav className="">
       <h1 className="text-5xl text-shadow-2xs text-shadow-indigo-200">Podz</h1>
     </nav>
