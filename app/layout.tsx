@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Roboto, Ubuntu } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geistSans = Roboto({
+  variable: "--font-roboto",
+  weight:['400','700'],
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const geistMono = Ubuntu({
+  variable: "--font-ubuntu",
+  weight:['400','700'],
+  subsets: ['greek'],
 });
 
 export const metadata: Metadata = {

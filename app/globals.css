@@ -5,12 +5,47 @@
   --foreground: #171717;
 }
 
+body{
+  overflow: hidden;
+}
+
+.button-wrapper{
+  background: conic-gradient(white 0deg ,transparent 60deg);
+  animation: border-spin 7s linear infinite;
+
+}
+
+.card-wrapper::before {
+  background: conic-gradient(white 0deg, transparent 80deg);
+  animation: border-spin 7s linear infinite;
+  z-index: 1;
+  
+  
+  @apply absolute h-[200vh] w-[200vh] top-[-700px] left-[-45%] content-['']
+}
+
+.card-content {
+  z-index: 2;
+  position: relative;
+}
+
+@keyframes border-spin {
+  from {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
