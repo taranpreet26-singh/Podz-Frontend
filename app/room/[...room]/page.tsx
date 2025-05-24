@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import { ArrowBigRight, Camera, CameraOff, Mic, MicOff, X } from 'lucide-react';
+import { Camera, CameraOff, Mic, MicOff, X } from 'lucide-react';
 import Button from "@/components/ui/Button";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 
 
@@ -17,10 +17,9 @@ export default function Home() {
   const [audioStatus, setAudioStatus] = useState<boolean>(true)
   const [overlayStatus, setOverlayStatus] = useState<boolean>(true)
   const [currentRoom, setRoom] = useState<string>("")
-  const [showMyVideo, setShowMyVideo] = useState<boolean>(true)
   const myVideoRef = useRef<HTMLVideoElement>(null)
   const { room } = useParams()
-  const URL = "ws://localhost:8888"
+  // const URL = "ws://localhost:8888"
 
   useEffect(() => {
     if (room) {
