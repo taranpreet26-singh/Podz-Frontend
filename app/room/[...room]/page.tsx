@@ -220,10 +220,10 @@ export default function Home() {
     <div className="w-full  min-h-screen py-10">
       <div className="grid grid-cols-1   lg:grid-cols-2 px-10 lg:px-20 w-full gap-2 lg:gap-10 justify-center items-center">
         <div className="w-[30vw] absolute bottom-5 lg:bottom-0 right-5 z-[1] h-[30vh] lg:relative  mx-auto p-4 lg:w-full lg:h-[80vh]">
-          <video ref={localVideoRef} autoPlay muted className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
+          <video ref={localVideoRef} playsInline autoPlay muted className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
         <div className="w-full h-[100vh] absolute inset-0 z-[-1] lg:relative mx-auto p-4 lg:w-full lg:h-[80vh]">
-          <video ref={remoteUserVideoRef} autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
+          <video ref={remoteUserVideoRef} playsInline  autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
         </div>
       </div>
       <div className="w-full fixed -bottom-5 lg:relative   flex  items-center  justify-center">
