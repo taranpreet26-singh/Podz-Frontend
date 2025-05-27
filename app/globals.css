@@ -5,9 +5,6 @@
   --foreground: #171717;
 }
 
-body{
-  overflow: hidden;
-}
 
 .button-wrapper{
   background: conic-gradient(white 0deg ,transparent 60deg);

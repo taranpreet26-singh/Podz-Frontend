@@ -27,7 +27,6 @@ export default function Home() {
 
       console.log(room[0])
       const socket = new WebSocket("wss://podz-server.onrender.com")
-      // const pc = new RTCPeerConnection()
       const pc = new RTCPeerConnection({
         iceServers: [
           { urls: "stun:stun.l.google.com:19302" }
@@ -40,9 +39,6 @@ export default function Home() {
           type: "join",
           room: room[0]
         }))
-
-
-
       }
 
       pc.onnegotiationneeded = async () => {
@@ -116,7 +112,7 @@ export default function Home() {
       }
     }
     handleMyVideo()
-  }, [])
+  }, [room])
 
   function handleAudio() {
     if (localVideoRef.current) {
@@ -166,14 +162,17 @@ export default function Home() {
       audio: {
         echoCancellation: true,
         noiseSuppression: true,
-        autoGainControl: true
+        autoGainControl: true,
+        channelCount:1
       }
     });
     stream.getTracks().forEach(track => {
       localUserRef.current?.addTrack(track, stream)
+      
     })
     if (localVideoRef.current) {
       localVideoRef.current.srcObject = stream
+    localVideoRef.current.muted = true; 
     }
   }
 
@@ -193,7 +192,6 @@ export default function Home() {
   }
 
   async function handleMyVideo() {
-
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         width: { ideal: 3840 },
@@ -203,13 +201,15 @@ export default function Home() {
       audio: {
         echoCancellation: true,
         noiseSuppression: true,
-        autoGainControl: true
+        autoGainControl: true,
+        channelCount:1
       }
     });
 
     if (myVideoRef.current) {
       myVideoRef.current.srcObject = stream;
       myVideoRef.current.muted = true;
+      
     }
 
   }
@@ -220,7 +220,7 @@ export default function Home() {
     <div className="w-full  min-h-screen py-10">
       <div className="grid grid-cols-1   lg:grid-cols-2 px-10 lg:px-20 w-full gap-2 lg:gap-10 justify-center items-center">
         <div className="w-[30vw] absolute bottom-5 lg:bottom-0 right-5 z-[1] h-[30vh] lg:relative  mx-auto p-4 lg:w-full lg:h-[80vh]">
-          <video ref={localVideoRef} autoPlay className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
+          <video ref={localVideoRef} autoPlay muted className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
         <div className="w-full h-[100vh] absolute inset-0 z-[-1] lg:relative mx-auto p-4 lg:w-full lg:h-[80vh]">
           <video ref={remoteUserVideoRef} autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
