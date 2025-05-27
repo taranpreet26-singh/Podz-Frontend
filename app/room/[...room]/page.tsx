@@ -27,7 +27,12 @@ export default function Home() {
 
       console.log(room[0])
       const socket = new WebSocket("wss://podz-server.onrender.com")
-      const pc = new RTCPeerConnection()
+      // const pc = new RTCPeerConnection()
+      const pc = new RTCPeerConnection({
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" }
+        ]
+      });
       localUserRef.current = pc
       socket.onopen = () => {
         console.log("onopen")
@@ -111,8 +116,6 @@ export default function Home() {
       }
     }
     handleMyVideo()
-
-
   }, [])
 
   function handleAudio() {
@@ -154,18 +157,18 @@ export default function Home() {
 
   async function sendingVideo() {
 
-     const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: { ideal: 3840 },
-      height: { ideal: 2160 },
-      frameRate: { ideal: 60 }
-    },
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: true,
-      autoGainControl: true
-    }
-  });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 3840 },
+        height: { ideal: 2160 },
+        frameRate: { ideal: 60 }
+      },
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }
+    });
     stream.getTracks().forEach(track => {
       localUserRef.current?.addTrack(track, stream)
     })
@@ -191,25 +194,25 @@ export default function Home() {
 
   async function handleMyVideo() {
 
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: { ideal: 3840 },
-      height: { ideal: 2160 },
-      frameRate: { ideal: 60 }
-    },
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: true,
-      autoGainControl: true
-    }
-  });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 3840 },
+        height: { ideal: 2160 },
+        frameRate: { ideal: 60 }
+      },
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }
+    });
 
-  if (myVideoRef.current) {
-    myVideoRef.current.srcObject = stream;
-    myVideoRef.current.muted = true; 
+    if (myVideoRef.current) {
+      myVideoRef.current.srcObject = stream;
+      myVideoRef.current.muted = true;
+    }
+
   }
-  
-}
 
 
 
@@ -217,10 +220,10 @@ export default function Home() {
     <div className="w-full  min-h-screen py-10">
       <div className="grid grid-cols-1   lg:grid-cols-2 px-10 lg:px-20 w-full gap-2 lg:gap-10 justify-center items-center">
         <div className="w-[30vw] absolute bottom-5 lg:bottom-0 right-5 z-[1] h-[30vh] lg:relative  mx-auto p-4 lg:w-full lg:h-[80vh]">
-        <video ref={localVideoRef} autoPlay className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
+          <video ref={localVideoRef} autoPlay className="w-full h-full   rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
         <div className="w-full h-[100vh] absolute inset-0 z-[-1] lg:relative mx-auto p-4 lg:w-full lg:h-[80vh]">
-        <video ref={remoteUserVideoRef} autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
+          <video ref={remoteUserVideoRef} autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
         </div>
       </div>
       <div className="w-full fixed -bottom-5 lg:relative   flex  items-center  justify-center">
@@ -254,28 +257,28 @@ export default function Home() {
               <div className="mb-6">
                 <h1 className="text-xl">{currentRoom}</h1>
               </div>
-                  <div className="flex flex-col gap-6 items-center justify-center" onClick={handleStartMeeting}>
-                    <video ref={myVideoRef} autoPlay className="w-full h-[40vh]  rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
-                    <div className="cursor-pointer">
-                    <Button>
-                      Start Meeting
-                    </Button>
-                    </div>
-                  </div>
-            <div onClick={handleOverlayClose} className="absolute top-4 right-3 hover:rotate-90 transition-all duration-800 ease-in-out">
-              <X width={30} height={30} />
-            </div>
+              <div className="flex flex-col gap-6 items-center justify-center" onClick={handleStartMeeting}>
+                <video ref={myVideoRef} autoPlay className="w-full h-[40vh]  rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
+                <div className="cursor-pointer">
+                  <Button>
+                    Start Meeting
+                  </Button>
+                </div>
+              </div>
+              <div onClick={handleOverlayClose} className="absolute top-4 right-3 hover:rotate-90 transition-all duration-800 ease-in-out">
+                <X width={30} height={30} />
+              </div>
             </div>
 
           </div>
         </div>
       }
-        <div className="absolute -bottom-10 left-0 w-56 drop-shadow-2xl  h-56 blur-[200px] bg-white ">
-    </div>
-        <div className="absolute -top-10 right-0 w-56 drop-shadow-2xl  h-56 blur-[200px] bg-purple-500 ">
-    </div>
+      <div className="absolute -bottom-10 left-0 w-56 drop-shadow-2xl  h-56 blur-[200px] bg-white ">
+      </div>
+      <div className="absolute -top-10 right-0 w-56 drop-shadow-2xl  h-56 blur-[200px] bg-purple-500 ">
+      </div>
       <div className="absolute top-20 w-full scale-110 h-full z-[-1]">
-        <Image src={"/images/ring-light.webp"} alt="light" width={500} height={500} className="w-full h-full"/>
+        <Image src={"/images/ring-light.webp"} alt="light" width={500} height={500} className="w-full h-full" />
       </div>
       <Toaster position="top-right" />
     </div>
