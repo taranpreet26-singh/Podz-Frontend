@@ -14,6 +14,7 @@
     "@types/express": "^5.0.2",
     "@types/ws": "^8.18.1",
     "express": "^5.1.0",
+    "framer-motion": "^12.15.0",
     "http": "^0.0.1-security",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",

@@ -2,27 +2,34 @@
 import Button from "@/components/ui/Button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-
+import { easeOut, motion } from "framer-motion"
+import {v4 as uuid} from "uuid"
 export default function Home() {
   const [room, setRoom] = useState<string>("");
+  const [isOpenSuggestion,setOpenSuggestion] = useState<boolean>(false)
   const navigate = useRouter();
+  const listArr = [
+    "Start meeting",
+    "Create meeting for later"
+  ]
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    document.body.style.overflowX = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-      document.body.style.overflowX = "auto";
-    };
-  }, []);
 
   function handleMeeting() {
+    setOpenSuggestion(false)
     if (room.trim() !== "") {
       navigate.push(`/room/${room}`);
     } else {
       toast.error("Please provide a room name.");
+    }
+  }
+
+  function handleListTypeMeeting(index : number){
+    if(index === 0){
+      handleMeeting()
+    }else if(index === 1){
+      setRoom(uuid())
     }
   }
 
@@ -51,10 +58,29 @@ export default function Home() {
           </p>
 
           <div
-            className="flex flex-col-reverse lg:flex-row items-center justify-center gap-4 w-full mt-6"
-            onClick={handleMeeting}
+            className="flex flex-col-reverse relative lg:flex-row items-center justify-center gap-4 w-full mt-6"
+            
           > 
-          <div className="cursor-pointer">
+        {
+          isOpenSuggestion &&
+          <motion.div initial={{opacity:0,y:25}}
+          animate={{opacity:1,y:0}}
+          transition={{duration:1,ease:easeOut}}
+          className="bg-white p-6 rounded-2xl top-[125px] lg:left-40 lg:top-[56px]  z-20 font-bold text-black w-fit absolute">
+            <ul>
+              {
+                listArr.map((element,index)=>{
+                  return <motion.li className="cursor-pointer" onClick={()=>{ handleListTypeMeeting(index);}} whileHover={{scale:"1.1"}}  key={index}  >
+                    {element}
+                  </motion.li>
+                })
+              }
+            </ul>
+          </motion.div>
+
+          }
+
+          <div onClick={()=>{ setOpenSuggestion(true);}}  className="cursor-pointer">
             <Button>New Meeting</Button>
           </div>
             <div
