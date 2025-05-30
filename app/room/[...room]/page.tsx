@@ -5,7 +5,6 @@ import Button from "@/components/ui/Button";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 
 
 export default function Home() {
