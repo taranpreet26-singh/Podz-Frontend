@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import { Camera, CameraOff, Mic, MicOff, X } from 'lucide-react';
+import { Camera, CameraOff, Mic, MicOff, MonitorUp, ScreenShareOff, X } from 'lucide-react';
 import Button from "@/components/ui/Button";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
@@ -16,8 +16,10 @@ export default function Home() {
   const [screenStatus, setScreenStatus] = useState<boolean>(true)
   const [audioStatus, setAudioStatus] = useState<boolean>(true)
   const [overlayStatus, setOverlayStatus] = useState<boolean>(true)
+  const [screenDsiplayShare, setScreenShareStatus] = useState<boolean>(true)
   const [currentRoom, setRoom] = useState<string>("")
   const myVideoRef = useRef<HTMLVideoElement>(null)
+  const screenDisplayRef = useRef<HTMLVideoElement>(null)
   const { room } = useParams()
   // const URL = "ws://localhost:8888"
 
@@ -152,7 +154,7 @@ export default function Home() {
   }
 
   async function sendingVideo() {
-
+    setAudioStatus(true)
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         width: { ideal: 3840 },
@@ -212,17 +214,35 @@ export default function Home() {
     }
   }
 
+  async function handleScreenShare(){
+    if(screenDsiplayShare){
+
+      const screenShareStream = await window.navigator.mediaDevices.getDisplayMedia()
+      
+      if(screenDisplayRef.current){
+        screenDisplayRef.current.srcObject = screenShareStream
+      } 
+      screenShareStream.getTracks().forEach(track=>{
+        localUserRef.current?.addTrack(track,screenShareStream)
+      })
+      setScreenShareStatus(false)
+    }else{
+      sendingVideo()
+      setScreenShareStatus(true)
+    }
+  }
+
   return (
     <div className="w-full  min-h-screen  overflow-hidden">
-      <div className="grid  relative z-[2] grid-cols-1   lg:grid-cols-2 px-10 lg:px-20 w-full gap-2 lg:gap-10 justify-center items-center">
-        <div className="w-[30vw] absolute bottom-5 lg:bottom-0 right-5 z-[1] h-[30vh] lg:relative  mx-auto p-4 lg:w-full lg:h-[80vh]">
-          <video ref={localVideoRef} playsInline  autoPlay muted className="w-full h-full rounded-2xl shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
+      <div className="w-full   h-full">
+        <div className={`w-[16vw] absolute  bottom-10  right-10 z-[1] h-[32vh] `}>
+          <video ref={localVideoRef} playsInline  autoPlay muted className="w-full h-full rounded-full shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
-        <div className="w-full h-[100vh] absolute inset-0 z-[-1] lg:relative mx-auto p-4 lg:w-full lg:h-[80vh]">
+        <div className="w-full h-[100vh] p-6 z-[-1] ">
           <video ref={remoteUserVideoRef} playsInline  autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
         </div>
       </div>
-      <div className="w-full absolute bottom-5 flex  items-center  justify-center">
+      <div className="w-full absolute bottom-0 flex  items-center  justify-center">
         <div className="px-4 card-wrapper overflow-hidden  relative bg-gradient-to-b from-slate-700 to-slate-800  rounded-full  p-[1px] ">
           <div className="w-full card-content p-2  h-full bg-black rounded-full   items-center justify-center gap-6   flex">
             <div className="flex max-w-fit    items-center justify-center " onClick={handleScreenPlay}>
@@ -235,6 +255,12 @@ export default function Home() {
               {
                 audioStatus ? <Mic width={50} height={50} color="black" className="bg-white shadow-2xl  rounded-full p-3  backdrop-blur-2xl" /> :
                   <MicOff width={50} height={50} color="black" className="bg-white shadow-2xl  rounded-full p-3  backdrop-blur-2xl" />
+              }
+            </div>
+            <div className="flex max-w-fit    items-center justify-center " onClick={handleScreenShare}>
+              {
+                screenDsiplayShare ? <MonitorUp width={50} height={50} color="black" className="bg-white shadow-2xl  rounded-full p-3  backdrop-blur-2xl" /> :
+                  <ScreenShareOff width={50} height={50} color="black" className="bg-white shadow-2xl  rounded-full p-3  backdrop-blur-2xl" />
               }
             </div>
           </div>
@@ -273,9 +299,7 @@ export default function Home() {
       </div>
       <div className="absolute -top-10 right-0 w-56 drop-shadow-2xl  h-56 blur-[200px] bg-purple-500 ">
       </div>
-      <div className="absolute top-0 w-full  h-full z-[-2]">
-        <Image src={"/images/ring-light.webp"} alt="light" width={500} height={500} className="w-full h-full" />
-      </div>
+     
       <Toaster position="top-right" />
     </div>
   );
