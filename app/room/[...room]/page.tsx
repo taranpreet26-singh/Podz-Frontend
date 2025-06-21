@@ -156,6 +156,7 @@ export default function Home() {
     setAudioStatus(true)
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
+         facingMode: "user",
         width: { ideal: 3840 },
         height: { ideal: 2160 },
         frameRate: { ideal: 60 }
@@ -217,6 +218,12 @@ export default function Home() {
     if(screenDsiplayShare){
 
       const screenShareStream = await window.navigator.mediaDevices.getDisplayMedia()
+      const stream = localVideoRef.current?.srcObject as MediaStream
+        stream.getTracks().forEach((track) => {
+          if (track.kind === "audio") {
+            track.enabled = false
+          }
+        })
       
       if(screenDisplayRef.current){
         screenDisplayRef.current.srcObject = screenShareStream
@@ -234,7 +241,7 @@ export default function Home() {
   return (
     <div className="w-full  min-h-screen  overflow-hidden">
       <div className="w-full   h-full">
-        <div className={`w-[16vw] absolute  bottom-10  right-10 z-[1] h-[32vh] `}>
+        <div className={`w-[16vw] aspect-square absolute  bottom-10  right-10 z-[1]  `}>
           <video ref={localVideoRef} playsInline  autoPlay muted className="w-full h-full rounded-full shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
         <div className="w-full h-[100vh] p-6 z-[-1] ">
