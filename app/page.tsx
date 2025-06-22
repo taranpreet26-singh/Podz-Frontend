@@ -18,6 +18,9 @@ export default function Home() {
 
   function handleMeeting() {
     setOpenSuggestion(false)
+    
+    
+
     if (room.trim() !== "") {
       navigate.push(`/room/${room}`);
     } else {

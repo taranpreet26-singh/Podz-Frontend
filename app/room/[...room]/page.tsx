@@ -217,19 +217,22 @@ export default function Home() {
   async function handleScreenShare(){
     if(screenDsiplayShare){
 
-      const screenShareStream = await window.navigator.mediaDevices.getDisplayMedia()
-      const stream = localVideoRef.current?.srcObject as MediaStream
-        stream.getTracks().forEach((track) => {
-          if (track.kind === "audio") {
-            track.enabled = false
-          }
-        })
+      const screenShareStream = await window.navigator.mediaDevices.getDisplayMedia({
+        video:true,
+        audio:true
+      })
+      
+      const audioStream = await window.navigator.mediaDevices.getUserMedia({
+        audio:true
+      })
+
+      const combinedStream = new MediaStream([...screenShareStream.getVideoTracks(),...audioStream.getAudioTracks()])
       
       if(screenDisplayRef.current){
-        screenDisplayRef.current.srcObject = screenShareStream
+        screenDisplayRef.current.srcObject = combinedStream
       } 
       screenShareStream.getTracks().forEach(track=>{
-        localUserRef.current?.addTrack(track,screenShareStream)
+        localUserRef.current?.addTrack(track,combinedStream)
       })
       setScreenShareStatus(false)
     }else{
@@ -241,12 +244,13 @@ export default function Home() {
   return (
     <div className="w-full  min-h-screen  overflow-hidden">
       <div className="w-full   h-full">
-        <div className={`w-[16vw] aspect-square absolute  bottom-10  right-10 z-[1]  `}>
+        <div className={`w-[16vw] aspect-square absolute  bottom-5  right-5 z-[1]  `}>
           <video ref={localVideoRef} playsInline  autoPlay muted className="w-full h-full rounded-full shadow-lg shadow-emerald-200/40 transition-all duration-300 object-cover border-green-200 border-2"></video>
         </div>
-        <div className="w-full h-[100vh] p-6 z-[-1] ">
-          <video ref={remoteUserVideoRef} playsInline  autoPlay className="w-full h-full  rounded-2xl object-cover border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
+        <div className="w-full h-[100vh] p-4 lg:p-2 z-[-1] ">
+          <video ref={remoteUserVideoRef} playsInline  autoPlay className="w-full h-full  rounded-2xl object-contain border-blue-200 drop-shadow-2xl shadow-blue-400/40 shadow-lg transition-all duration-300 border-2"></video>
         </div>
+       
       </div>
       <div className="w-full absolute bottom-0 flex  items-center  justify-center">
         <div className="px-4 card-wrapper overflow-hidden  relative bg-gradient-to-b from-slate-700 to-slate-800  rounded-full  p-[1px] ">
