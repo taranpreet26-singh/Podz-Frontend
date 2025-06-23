@@ -196,6 +196,7 @@ export default function Home() {
   async function handleMyVideo() {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
+        facingMode:"user",
         width: { ideal: 3840 },
         height: { ideal: 2160 },
         frameRate: { ideal: 60 }
